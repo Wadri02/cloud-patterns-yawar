@@ -1,0 +1,49 @@
+=== 2026-11-23T12:35:55Z  06-hub-and-spoke  account=651938348754 region=us-east-1 ===
+  "hub" = "i-0cf14131e1443e532"
+  "inventory" = "i-0a2dd71da6d827ba6"
+}
+transit_gateway_id = "tgw-03e2ae6f6d5e90895"
+
+### Transit Gateway route tables
+rt-internal:
+10.0.0.0/16	10.1.0.0/16	10.2.0.0/16	10.3.0.0/16
+rt-partner:
+10.0.0.0/16	10.2.0.0/16
+
+### waiting for the probes (they start 90 s after boot)
+  07:39:15 probes finished: 0/4
+  07:39:51 probes finished: 0/4
+  07:40:26 probes finished: 0/4
+  07:41:01 probes finished: 0/4
+  07:41:37 probes finished: 2/4
+  07:42:12 probes finished: 2/4
+  07:42:48 probes finished: 4/4
+
+### connectivity matrix (expected: hospital cannot reach donors in either direction)
+YAWAR-PROBE from=donors to=hospital (10.3.0.10) result=FAIL
+YAWAR-PROBE from=donors to=hospital (10.3.0.10) result=FAIL
+YAWAR-PROBE from=donors to=hub (10.0.0.10) result=OK {"vpc":"hub"}
+YAWAR-PROBE from=donors to=hub (10.0.0.10) result=OK {"vpc":"hub"}
+YAWAR-PROBE from=donors to=inventory (10.2.0.10) result=OK {"vpc":"inventory"}
+YAWAR-PROBE from=donors to=inventory (10.2.0.10) result=OK {"vpc":"inventory"}
+YAWAR-PROBE from=hospital to=donors (10.1.0.10) result=FAIL
+YAWAR-PROBE from=hospital to=donors (10.1.0.10) result=FAIL
+YAWAR-PROBE from=hospital to=hub (10.0.0.10) result=OK {"vpc":"hub"}
+YAWAR-PROBE from=hospital to=hub (10.0.0.10) result=OK {"vpc":"hub"}
+YAWAR-PROBE from=hospital to=inventory (10.2.0.10) result=OK {"vpc":"inventory"}
+YAWAR-PROBE from=hospital to=inventory (10.2.0.10) result=OK {"vpc":"inventory"}
+YAWAR-PROBE from=hub to=donors (10.1.0.10) result=OK {"vpc":"donors"}
+YAWAR-PROBE from=hub to=donors (10.1.0.10) result=OK {"vpc":"donors"}
+YAWAR-PROBE from=hub to=hospital (10.3.0.10) result=OK {"vpc":"hospital"}
+YAWAR-PROBE from=hub to=hospital (10.3.0.10) result=OK {"vpc":"hospital"}
+YAWAR-PROBE from=hub to=inventory (10.2.0.10) result=OK {"vpc":"inventory"}
+YAWAR-PROBE from=hub to=inventory (10.2.0.10) result=OK {"vpc":"inventory"}
+YAWAR-PROBE from=inventory to=donors (10.1.0.10) result=OK {"vpc":"donors"}
+YAWAR-PROBE from=inventory to=donors (10.1.0.10) result=OK {"vpc":"donors"}
+YAWAR-PROBE from=inventory to=hospital (10.3.0.10) result=OK {"vpc":"hospital"}
+YAWAR-PROBE from=inventory to=hospital (10.3.0.10) result=OK {"vpc":"hospital"}
+YAWAR-PROBE from=inventory to=hub (10.0.0.10) result=OK {"vpc":"hub"}
+YAWAR-PROBE from=inventory to=hub (10.0.0.10) result=OK {"vpc":"hub"}
+
+Destroy the hub-and-spoke stack now to stop the hourly cost? [Y/n] [0m[1m[32m
+Destroy complete! Resources: 41 destroyed.[0m

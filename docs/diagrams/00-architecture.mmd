@@ -1,0 +1,9 @@
+flowchart LR
+  U((Client)) -->|HTTPS| CF[CloudFront]
+  CF --> APIGW[API Gateway]
+  APIGW --> ALB[ALB]
+  ALB -->|/api/donors| D[ms-donors x3]
+  ALB -->|/api/inventory| I[ms-inventory]
+  ALB -->|/api/requests| R[ms-requests]
+  R -->|resilient calls| I
+  U -->|POST /stock-alerts| L[Lambda Python]

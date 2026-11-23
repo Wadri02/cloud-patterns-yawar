@@ -1,0 +1,25 @@
+# Local smoke test BEFORE spending AWS credits: same images that will be pushed to ECR.
+#   docker compose up -d --build      then   ../scripts/local/test-local.sh
+name: yawar-local
+services:
+  ms-inventory:
+    build: { context: ., args: { MODULE: ms-inventory } }
+    image: yawar/ms-inventory:local
+    ports: ["8081:8080"]
+  ms-requests:
+    build: { context: ., args: { MODULE: ms-requests } }
+    image: yawar/ms-requests:local
+    environment:
+      INVENTORY_URL: http://ms-inventory:8080/api/inventory
+    ports: ["8082:8080"]
+    depends_on: [ms-inventory]
+  ms-donors-1:
+    build: { context: ., args: { MODULE: ms-donors } }
+    image: yawar/ms-donors:local
+    environment: { INSTANCE: ms-donors-1 }
+    ports: ["8083:8080"]
+  ms-donors-2:
+    image: yawar/ms-donors:local
+    environment: { INSTANCE: ms-donors-2 }
+    ports: ["8084:8080"]
+    depends_on: [ms-donors-1]

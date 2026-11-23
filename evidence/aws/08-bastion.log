@@ -1,0 +1,49 @@
+=== 2026-11-23T12:59:09Z  08-bastion  account=651938348754 region=us-east-1 ===
+
+[0mbastion_public_ip = "44.195.26.48"
+private_ip = "10.30.2.84"
+bastion=44.195.26.48 (public)  private=10.30.2.84  admin=<admin-ip>/32
+
+### waiting for SSH on the bastion
+
+### 1. the private instance has no public IP: direct access from the internet is impossible
+i-071cb531ceff633a4	10.30.2.84	None
+curl http://10.30.2.84:8080 -> unreachable (private address)
+
+### 2. Jump through the bastion (= ssh -J bastion private) -> run a command ON the private instance
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+Warning: Permanently added '10.30.2.84' (ED25519) to the list of known hosts.
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+ip-10-30-2-84.ec2.internal
+[{"id":"D-001","name":"Ana Quishpe","bloodType":"O+"},{"id":"D-002","name":"Luis Andrade","bloodType":"A-"}]
+
+
+### 3. Port forwarding through the bastion: localhost:9090 -> 10.30.2.84:8080
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+[{"id":"D-001","name":"Ana Quishpe","bloodType":"O+"},{"id":"D-002","name":"Luis Andrade","bloodType":"A-"}]
+
+
+### 4. SSH from the bastion to the private host is allowed, but the bastion cannot reach the internet
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+no internet egress from the bastion (SG egress = VPC only)
+
+### 5. audit trail on the bastion (sshd log)
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+Nov 23 13:00:21 ip-10-30-1-185.ec2.internal sshd-session[2083]: Accepted publickey for ec2-user from <admin-ip> port 52365 ssh2: RSA SHA256:3DwmL6Dts3wR9gMlIJkRS9sLjVnwIwDgACVqrEFuFHM
+Nov 23 13:00:21 ip-10-30-1-185.ec2.internal sshd-session[2083]: pam_unix(sshd:session): session opened for user ec2-user(uid=1000) by (uid=0)
+Nov 23 13:00:24 ip-10-30-1-185.ec2.internal sshd-session[2103]: Accepted publickey for ec2-user from <admin-ip> port 52366 ssh2: RSA SHA256:3DwmL6Dts3wR9gMlIJkRS9sLjVnwIwDgACVqrEFuFHM
+Nov 23 13:00:24 ip-10-30-1-185.ec2.internal sshd-session[2103]: pam_unix(sshd:session): session opened for user ec2-user(uid=1000) by (uid=0)
+Nov 23 13:00:27 ip-10-30-1-185.ec2.internal sshd-session[2107]: Accepted publickey for ec2-user from <admin-ip> port 52367 ssh2: RSA SHA256:3DwmL6Dts3wR9gMlIJkRS9sLjVnwIwDgACVqrEFuFHM
+Nov 23 13:00:27 ip-10-30-1-185.ec2.internal sshd-session[2107]: pam_unix(sshd:session): session opened for user ec2-user(uid=1000) by (uid=0)
+Nov 23 13:00:33 ip-10-30-1-185.ec2.internal sshd-session[2132]: Accepted publickey for ec2-user from <admin-ip> port 52370 ssh2: RSA SHA256:3DwmL6Dts3wR9gMlIJkRS9sLjVnwIwDgACVqrEFuFHM
+Nov 23 13:00:33 ip-10-30-1-185.ec2.internal sshd-session[2132]: pam_unix(sshd:session): session opened for user ec2-user(uid=1000) by (uid=0)

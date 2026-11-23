@@ -1,0 +1,12 @@
+# systemd unit used on the on-premises server AND, unchanged, on the EC2 instance.
+[Unit]
+Description=Yawar legacy donor registry
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/java -jar /opt/yawar/legacy-registry.jar
+Restart=on-failure
+User=root
+
+[Install]
+WantedBy=multi-user.target

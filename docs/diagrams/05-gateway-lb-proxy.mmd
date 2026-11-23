@@ -1,0 +1,8 @@
+flowchart LR
+  U((Client)) -->|HTTPS| CF[CloudFront<br/>reverse proxy: TLS, cache]
+  CF -->|x-api-key| GW[API Gateway REST<br/>API keys, throttling, routing]
+  GW --> ALB[ALB<br/>round robin + health checks]
+  ALB --> D1[ms-donors 1]
+  ALB --> D2[ms-donors 2]
+  ALB --> D3[ms-donors 3]
+  ALB --> I[ms-inventory]

@@ -1,0 +1,12 @@
+sequenceDiagram
+  participant C as ms-requests
+  participant S as ms-inventory
+  C->>S: GET /api/inventory (attempt 1)
+  S-->>C: 503 transient
+  Note over C: wait random(0, 100 ms)
+  C->>S: attempt 2
+  S-->>C: 503 transient
+  Note over C: wait random(0, 200 ms)
+  C->>S: attempt 3
+  S-->>C: 200 OK
+  Note over C,S: 4xx never retried, POST carries Idempotency-Key

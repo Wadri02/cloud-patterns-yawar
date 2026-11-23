@@ -1,0 +1,8 @@
+sequenceDiagram
+  participant G as ms-requests (budget 1000 ms)
+  participant I as ms-inventory
+  G->>I: /report?workMs=400 (X-Deadline-Ms 1000)
+  I-->>G: 200 after 400 ms
+  G->>I: /report?workMs=800 (X-Deadline-Ms ~600)
+  Note over I: needs 800 ms > budget
+  I-->>G: 504 immediately (no wasted work)

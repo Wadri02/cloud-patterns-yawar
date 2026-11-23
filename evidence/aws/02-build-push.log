@@ -1,0 +1,255 @@
+=== 2026-11-23T12:10:12Z  02-build-push  account=651938348754 region=us-east-1 ===
+
+### mvn test (JUnit)
+07:10:20.771 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [ec.edu.uce.yawar.donors.DonorControllerTest]: DonorControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+07:10:20.843 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration ec.edu.uce.yawar.donors.DonorsApplication for test class ec.edu.uce.yawar.donors.DonorControllerTest
+07:10:20.899 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [ec.edu.uce.yawar.donors.DonorControllerTest]: DonorControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+07:10:20.903 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration ec.edu.uce.yawar.donors.DonorsApplication for test class ec.edu.uce.yawar.donors.DonorControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.2)
+
+2026-11-23T07:10:21.117-05:00  INFO 45810 --- [ms-donors] [           main] e.e.u.yawar.donors.DonorControllerTest   : Starting DonorControllerTest using Java 21.0.13.1 with PID 45810 (started by adrian in /home/adrian/cloud-patterns-yawar/backend/ms-donors)
+2026-11-23T07:10:21.117-05:00  INFO 45810 --- [ms-donors] [           main] e.e.u.yawar.donors.DonorControllerTest   : No active profile set, falling back to 1 default profile: "default"
+2026-11-23T07:10:21.840-05:00  INFO 45810 --- [ms-donors] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-11-23T07:10:21.840-05:00  INFO 45810 --- [ms-donors] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-11-23T07:10:21.851-05:00  INFO 45810 --- [ms-donors] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoints beneath base path '/actuator'
+2026-11-23T07:10:21.861-05:00  INFO 45810 --- [ms-donors] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 21 ms
+2026-11-23T07:10:21.892-05:00  INFO 45810 --- [ms-donors] [           main] e.e.u.yawar.donors.DonorControllerTest   : Started DonorControllerTest in 0.949 seconds (process running for 1.63)
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+WARNING: A Java agent has been loaded dynamically (/home/adrian/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.15/byte-buddy-agent-1.18.15.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+2026-11-23T07:10:22.397-05:00  WARN 45810 --- [ms-donors] [           main] e.edu.uce.yawar.donors.DonorController   : chaos mode=fail on instance=DESKTOP-IFNJ2K6
+2026-11-23T07:10:22.451-05:00  WARN 45810 --- [ms-donors] [           main] e.edu.uce.yawar.donors.DonorController   : chaos mode=ok on instance=DESKTOP-IFNJ2K6
+2026-11-23T07:10:22.452-05:00  INFO 45810 --- [ms-donors] [           main] e.edu.uce.yawar.donors.DonorController   : GET /api/donors instance=DESKTOP-IFNJ2K6 reqId=null
+2026-11-23T07:10:22.463-05:00  INFO 45810 --- [ms-donors] [           main] e.edu.uce.yawar.donors.DonorController   : GET /api/donors instance=DESKTOP-IFNJ2K6 reqId=null
+07:10:23.214 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [ec.edu.uce.yawar.inventory.InventoryControllerTest]: InventoryControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+07:10:23.276 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration ec.edu.uce.yawar.inventory.InventoryApplication for test class ec.edu.uce.yawar.inventory.InventoryControllerTest
+07:10:23.322 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [ec.edu.uce.yawar.inventory.InventoryControllerTest]: InventoryControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+07:10:23.324 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration ec.edu.uce.yawar.inventory.InventoryApplication for test class ec.edu.uce.yawar.inventory.InventoryControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.2)
+
+2026-11-23T07:10:23.488-05:00  INFO 45881 --- [ms-inventory] [           main] e.e.u.y.i.InventoryControllerTest        : Starting InventoryControllerTest using Java 21.0.13.1 with PID 45881 (started by adrian in /home/adrian/cloud-patterns-yawar/backend/ms-inventory)
+2026-11-23T07:10:23.489-05:00  INFO 45881 --- [ms-inventory] [           main] e.e.u.y.i.InventoryControllerTest        : No active profile set, falling back to 1 default profile: "default"
+2026-11-23T07:10:24.137-05:00  INFO 45881 --- [ms-inventory] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-11-23T07:10:24.137-05:00  INFO 45881 --- [ms-inventory] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-11-23T07:10:24.148-05:00  INFO 45881 --- [ms-inventory] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoints beneath base path '/actuator'
+2026-11-23T07:10:24.162-05:00  INFO 45881 --- [ms-inventory] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 24 ms
+2026-11-23T07:10:24.186-05:00  INFO 45881 --- [ms-inventory] [           main] e.e.u.y.i.InventoryControllerTest        : Started InventoryControllerTest in 0.831 seconds (process running for 1.412)
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+WARNING: A Java agent has been loaded dynamically (/home/adrian/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.15/byte-buddy-agent-1.18.15.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+2026-11-23T07:10:24.620-05:00  WARN 45881 --- [ms-inventory] [           main] e.e.u.y.inventory.InventoryController    : failure mode set to lost:1
+2026-11-23T07:10:24.635-05:00  WARN 45881 --- [ms-inventory] [           main] e.e.u.y.inventory.InventoryController    : donation DON-0001 stored but response lost
+2026-11-23T07:10:24.669-05:00  WARN 45881 --- [ms-inventory] [           main] e.e.u.y.inventory.InventoryController    : failure mode set to flaky:2
+all tests passed
+
+### docker login to 651938348754.dkr.ecr.us-east-1.amazonaws.com
+Login Succeeded
+
+### build + push ms-donors:v1
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 617B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/eclipse-temurin:21-jre
+#2 ...
+
+#3 [internal] load metadata for docker.io/library/maven:3-eclipse-temurin-21
+#3 DONE 1.0s
+
+#2 [internal] load metadata for docker.io/library/eclipse-temurin:21-jre
+#2 DONE 1.1s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 74B done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 DONE 0.0s
+
+#6 [stage-1 1/3] FROM docker.io/library/eclipse-temurin:21-jre@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d
+#6 resolve docker.io/library/eclipse-temurin:21-jre@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d 0.0s done
+#6 DONE 0.0s
+
+#7 [build 1/4] FROM docker.io/library/maven:3-eclipse-temurin-21@sha256:3e18d95a0a49d18aa5b075e5ee3c30a98078c382850467dcd4caa49bb7dc4038
+#7 resolve docker.io/library/maven:3-eclipse-temurin-21@sha256:3e18d95a0a49d18aa5b075e5ee3c30a98078c382850467dcd4caa49bb7dc4038
+#7 resolve docker.io/library/maven:3-eclipse-temurin-21@sha256:3e18d95a0a49d18aa5b075e5ee3c30a98078c382850467dcd4caa49bb7dc4038 0.0s done
+#7 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 79.87kB 0.0s done
+#5 DONE 0.0s
+
+#8 [build 2/4] WORKDIR /src
+#8 CACHED
+
+#9 [build 3/4] COPY . .
+#9 CACHED
+
+#10 [build 4/4] RUN mvn -B -q -pl ms-donors -am package -DskipTests
+#10 DONE 25.8s
+
+#11 [stage-1 2/3] RUN useradd --system --uid 10001 yawar
+#11 CACHED
+
+#12 [stage-1 3/3] COPY --from=build /src/ms-donors/target/ms-donors.jar /app/app.jar
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers done
+#13 exporting manifest sha256:d4e7730fa47fb418bc8cddd6bc1925a5dc9273f2f1036b9ee5e299f4bebbe597 0.0s done
+#13 exporting config sha256:cfd0cfea769ba7ac10cea88a56ac7ede2974891e2879322104dcabb8633b57a0 0.0s done
+#13 exporting attestation manifest sha256:05b34ceb5b7c8317ac3349f8316620dbf6a66fc8b5e51b2f1ae0297c8872dcbd 0.0s done
+#13 exporting manifest list sha256:237907e936d4a947e3946ae615b82adfb87aac917e0308956c39daa4dd6d1d8e 0.0s done
+#13 naming to 651938348754.dkr.ecr.us-east-1.amazonaws.com/yawar/ms-donors:v1
+#13 naming to 651938348754.dkr.ecr.us-east-1.amazonaws.com/yawar/ms-donors:v1 done
+#13 unpacking to 651938348754.dkr.ecr.us-east-1.amazonaws.com/yawar/ms-donors:v1 done
+#13 DONE 0.1s
+651938348754.dkr.ecr.us-east-1.amazonaws.com/yawar/ms-donors:v1
+
+### build + push ms-inventory:v1
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 617B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/eclipse-temurin:21-jre
+#2 ...
+
+#3 [internal] load metadata for docker.io/library/maven:3-eclipse-temurin-21
+#3 DONE 0.5s
+
+#2 [internal] load metadata for docker.io/library/eclipse-temurin:21-jre
+#2 DONE 0.5s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 74B done
+#4 DONE 0.0s
+
+#5 [stage-1 1/3] FROM docker.io/library/eclipse-temurin:21-jre@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d
+#5 resolve docker.io/library/eclipse-temurin:21-jre@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d 0.0s done
+#5 DONE 0.0s
+
+#6 [build 1/4] FROM docker.io/library/maven:3-eclipse-temurin-21@sha256:3e18d95a0a49d18aa5b075e5ee3c30a98078c382850467dcd4caa49bb7dc4038
+#6 resolve docker.io/library/maven:3-eclipse-temurin-21@sha256:3e18d95a0a49d18aa5b075e5ee3c30a98078c382850467dcd4caa49bb7dc4038 0.0s done
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 7.22kB done
+#7 DONE 0.0s
+
+#8 [build 3/4] COPY . .
+#8 CACHED
+
+#9 [stage-1 2/3] RUN useradd --system --uid 10001 yawar
+#9 CACHED
+
+#10 [build 2/4] WORKDIR /src
+#10 CACHED
+
+#11 [build 4/4] RUN mvn -B -q -pl ms-inventory -am package -DskipTests
+#11 CACHED
+
+#12 [stage-1 3/3] COPY --from=build /src/ms-inventory/target/ms-inventory.jar /app/app.jar
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers done
+#13 exporting manifest sha256:9a4b121a7b48f615e4c103cb0d1040206890d8bc48e67725ac482cb1d7f498ca 0.0s done
+#13 exporting config sha256:5b77e6eaa73cd9f8ab4abb636642f564046a7bbebaa2d8e2a569f9ef05bac829 0.0s done
+#13 exporting attestation manifest sha256:1304db982f6f345aef35b7ec42ecb0b0198489e0b8a26b845354fc39b0aba572 0.0s done
+#13 exporting manifest list sha256:5bb6dac2984e0fa07014ae1d821d6e2951707f8d9bf5167ebf2783ac8b7bffcc 0.0s done
+#13 naming to 651938348754.dkr.ecr.us-east-1.amazonaws.com/yawar/ms-inventory:v1 done
+#13 unpacking to 651938348754.dkr.ecr.us-east-1.amazonaws.com/yawar/ms-inventory:v1 done
+#13 DONE 0.1s
+651938348754.dkr.ecr.us-east-1.amazonaws.com/yawar/ms-inventory:v1
+
+### build + push ms-requests:v1
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 617B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/maven:3-eclipse-temurin-21
+#2 DONE 0.2s
+
+#3 [internal] load metadata for docker.io/library/eclipse-temurin:21-jre
+#3 DONE 0.2s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 74B done
+#4 DONE 0.0s
+
+#5 [stage-1 1/3] FROM docker.io/library/eclipse-temurin:21-jre@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d
+#5 resolve docker.io/library/eclipse-temurin:21-jre@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d 0.0s done
+#5 DONE 0.0s
+
+#6 [build 1/4] FROM docker.io/library/maven:3-eclipse-temurin-21@sha256:3e18d95a0a49d18aa5b075e5ee3c30a98078c382850467dcd4caa49bb7dc4038
+#6 resolve docker.io/library/maven:3-eclipse-temurin-21@sha256:3e18d95a0a49d18aa5b075e5ee3c30a98078c382850467dcd4caa49bb7dc4038 0.0s done
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 7.22kB done
+#7 DONE 0.0s
+
+#8 [build 3/4] COPY . .
+#8 CACHED
+
+#9 [stage-1 2/3] RUN useradd --system --uid 10001 yawar
+#9 CACHED
+
+#10 [build 4/4] RUN mvn -B -q -pl ms-requests -am package -DskipTests
+#10 CACHED
+
+#11 [build 2/4] WORKDIR /src
+#11 CACHED
+
+#12 [stage-1 3/3] COPY --from=build /src/ms-requests/target/ms-requests.jar /app/app.jar
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers done
+#13 exporting manifest sha256:3bd483d301e9fe326fcbc4fbf17636a6e5f37a3cfb1a51ff1084f280ca4fd17b 0.0s done
+#13 exporting config sha256:cda4f7f89b4dd9f25ad989a530b6655bac0b750e5011e3abae05954e0ad42a7f 0.0s done
+#13 exporting attestation manifest sha256:00713fbff1b3c132db238b6d49c4ed37adb755b0be4933ee812dc3eb1f9b6966 0.0s done
+#13 exporting manifest list sha256:9a914d10c8b6dcb7338261aae33bdfdf3c63b28582425ca33de92882b949b85b 0.0s done
+#13 naming to 651938348754.dkr.ecr.us-east-1.amazonaws.com/yawar/ms-requests:v1 done
+#13 unpacking to 651938348754.dkr.ecr.us-east-1.amazonaws.com/yawar/ms-requests:v1 done
+#13 DONE 0.1s
+651938348754.dkr.ecr.us-east-1.amazonaws.com/yawar/ms-requests:v1
+
+### images in ECR
+yawar/ms-donors	None	1397	2026-11-23T07:10:59.459000-05:00
+yawar/ms-donors	None	141735433	2026-11-23T07:10:59.479000-05:00
+yawar/ms-donors	v1	141735433	2026-11-23T07:10:59.912000-05:00
+yawar/ms-inventory	None	141736061	2026-11-23T07:11:18.142000-05:00
+yawar/ms-inventory	None	1400	2026-11-23T07:11:18.161000-05:00
+yawar/ms-inventory	v1	141736061	2026-11-23T07:11:18.546000-05:00
+yawar/ms-requests	None	144535458	2026-11-23T07:11:38.343000-05:00
+yawar/ms-requests	None	1397	2026-11-23T07:11:38.339000-05:00
+yawar/ms-requests	v1	144535458	2026-11-23T07:11:38.773000-05:00

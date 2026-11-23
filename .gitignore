@@ -1,0 +1,9 @@
+**/target/
+**/__pycache__/
+.pytest_cache/
+**/.terraform/
+**/.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+**/terraform/build/
+07-lift-and-shift/work/

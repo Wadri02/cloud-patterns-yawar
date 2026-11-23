@@ -1,0 +1,12 @@
+flowchart LR
+  subgraph Serverless["Serverless - AWS Lambda (Python)"]
+    APIGW[API Gateway HTTP API<br/>POST /stock-alerts] --> L[Lambda<br/>blood-stock-alert]
+    EB[EventBridge<br/>rate 1 hour] --> L
+    L --> CW[(CloudWatch Logs)]
+  end
+  subgraph Containers["Containers - Amazon ECS on Fargate (Java)"]
+    ALB[Application Load Balancer] --> T1[ms-donors x3]
+    ALB --> T2[ms-inventory]
+    ALB --> T3[ms-requests]
+    ECR[(Amazon ECR)] -.image.-> T1
+  end

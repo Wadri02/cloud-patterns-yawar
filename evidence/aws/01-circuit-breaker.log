@@ -1,0 +1,149 @@
+=== 2026-11-23T12:18:43Z  01-circuit-breaker  account=651938348754 region=us-east-1 ===
+target: http://yawar-alb-84810282.us-east-1.elb.amazonaws.com
+
+### GET http://yawar-alb-84810282.us-east-1.elb.amazonaws.com/api/requests/demo/circuit-breaker?impl=custom
+=== 2026-11-23T12:18:43.847923217Z circuit-breaker demo (impl=custom) ===
+### A) WITHOUT circuit breaker (timeout 0.5 s + fallback only)
+call  1      5 ms  state=-         source=live
+call  2      5 ms  state=-         source=live
+call  3      5 ms  state=-         source=live
+call  4      4 ms  state=-         source=live
+call  5      4 ms  state=-         source=live
+   -- ms-inventory starts hanging --
+call  6    501 ms  state=-         source=cache (fallback)
+call  7    500 ms  state=-         source=cache (fallback)
+call  8    501 ms  state=-         source=cache (fallback)
+call  9    500 ms  state=-         source=cache (fallback)
+call 10    500 ms  state=-         source=cache (fallback)
+call 11    500 ms  state=-         source=cache (fallback)
+call 12    500 ms  state=-         source=cache (fallback)
+call 13    500 ms  state=-         source=cache (fallback)
+call 14    500 ms  state=-         source=cache (fallback)
+call 15    500 ms  state=-         source=cache (fallback)
+call 16    500 ms  state=-         source=cache (fallback)
+call 17    500 ms  state=-         source=cache (fallback)
+call 18    501 ms  state=-         source=cache (fallback)
+call 19    500 ms  state=-         source=cache (fallback)
+call 20    500 ms  state=-         source=cache (fallback)
+call 21    501 ms  state=-         source=cache (fallback)
+   -- ms-inventory recovered --
+call 22      4 ms  state=-         source=live
+call 23      6 ms  state=-         source=live
+call 24      4 ms  state=-         source=live
+call 25      4 ms  state=-         source=live
+call 26      5 ms  state=-         source=live
+call 27      4 ms  state=-         source=live
+call 28      4 ms  state=-         source=live
+call 29      4 ms  state=-         source=live
+call 30      4 ms  state=-         source=live
+### B) WITH circuit breaker (custom: 3 failures -> OPEN, 1.5 s -> HALF_OPEN)
+call  1     19 ms  state=CLOSED    source=live
+call  2     66 ms  state=CLOSED    source=live
+call  3     16 ms  state=CLOSED    source=live
+call  4     15 ms  state=CLOSED    source=live
+call  5      8 ms  state=CLOSED    source=live
+   -- ms-inventory starts hanging --
+call  6    502 ms  state=CLOSED    source=cache (fallback)
+call  7    500 ms  state=CLOSED    source=cache (fallback)
+call  8    500 ms  state=OPEN      source=cache (fallback)
+call  9      0 ms  state=OPEN      source=cache (fallback)
+call 10      0 ms  state=OPEN      source=cache (fallback)
+call 11      0 ms  state=OPEN      source=cache (fallback)
+call 12      0 ms  state=OPEN      source=cache (fallback)
+call 13      0 ms  state=OPEN      source=cache (fallback)
+call 14    501 ms  state=OPEN      source=cache (fallback)
+call 15      0 ms  state=OPEN      source=cache (fallback)
+call 16      0 ms  state=OPEN      source=cache (fallback)
+call 17      0 ms  state=OPEN      source=cache (fallback)
+call 18      0 ms  state=OPEN      source=cache (fallback)
+call 19      0 ms  state=OPEN      source=cache (fallback)
+call 20    500 ms  state=OPEN      source=cache (fallback)
+call 21      0 ms  state=OPEN      source=cache (fallback)
+   -- ms-inventory recovered --
+call 22      0 ms  state=OPEN      source=cache (fallback)
+call 23      0 ms  state=OPEN      source=cache (fallback)
+call 24      0 ms  state=OPEN      source=cache (fallback)
+call 25      0 ms  state=OPEN      source=cache (fallback)
+call 26      4 ms  state=CLOSED    source=live
+call 27      4 ms  state=CLOSED    source=live
+call 28      4 ms  state=CLOSED    source=live
+call 29      4 ms  state=CLOSED    source=live
+call 30      4 ms  state=CLOSED    source=live
+### Summary: callers waited 8.00 s during the outage (calls 6-21) WITHOUT breaker; 30 requests reached ms-inventory
+### Summary: callers waited 2.50 s during the outage (calls 6-21) WITH breaker;    15 requests reached ms-inventory
+SUMMARY {"withoutBreakerOutageSeconds": 8.004, "withBreakerOutageSeconds": 2.503, "requestsWithoutBreaker": 30, "requestsWithBreaker": 15}
+
+### GET http://yawar-alb-84810282.us-east-1.elb.amazonaws.com/api/requests/demo/circuit-breaker?impl=resilience4j
+=== 2026-11-23T12:19:12.135023868Z circuit-breaker demo (impl=resilience4j) ===
+### A) WITHOUT circuit breaker (timeout 0.5 s + fallback only)
+call  1      4 ms  state=-         source=live
+call  2      4 ms  state=-         source=live
+call  3      4 ms  state=-         source=live
+call  4      4 ms  state=-         source=live
+call  5      4 ms  state=-         source=live
+   -- ms-inventory starts hanging --
+call  6    500 ms  state=-         source=cache (fallback)
+call  7    501 ms  state=-         source=cache (fallback)
+call  8    500 ms  state=-         source=cache (fallback)
+call  9    501 ms  state=-         source=cache (fallback)
+call 10    500 ms  state=-         source=cache (fallback)
+call 11    501 ms  state=-         source=cache (fallback)
+call 12    500 ms  state=-         source=cache (fallback)
+call 13    500 ms  state=-         source=cache (fallback)
+call 14    500 ms  state=-         source=cache (fallback)
+call 15    501 ms  state=-         source=cache (fallback)
+call 16    500 ms  state=-         source=cache (fallback)
+call 17    500 ms  state=-         source=cache (fallback)
+call 18    501 ms  state=-         source=cache (fallback)
+call 19    500 ms  state=-         source=cache (fallback)
+call 20    500 ms  state=-         source=cache (fallback)
+call 21    500 ms  state=-         source=cache (fallback)
+   -- ms-inventory recovered --
+call 22      4 ms  state=-         source=live
+call 23      4 ms  state=-         source=live
+call 24      4 ms  state=-         source=live
+call 25      4 ms  state=-         source=live
+call 26      6 ms  state=-         source=live
+call 27      5 ms  state=-         source=live
+call 28      4 ms  state=-         source=live
+call 29      4 ms  state=-         source=live
+call 30      4 ms  state=-         source=live
+### B) WITH circuit breaker (resilience4j: 3 failures -> OPEN, 1.5 s -> HALF_OPEN)
+call  1      4 ms  state=CLOSED    source=live
+call  2      5 ms  state=CLOSED    source=live
+call  3      4 ms  state=CLOSED    source=live
+call  4      4 ms  state=CLOSED    source=live
+call  5      4 ms  state=CLOSED    source=live
+   -- ms-inventory starts hanging --
+call  6    500 ms  state=CLOSED    source=cache (fallback)
+call  7    500 ms  state=CLOSED    source=cache (fallback)
+call  8    504 ms  state=OPEN      source=cache (fallback)
+call  9      0 ms  state=OPEN      source=cache (fallback)
+call 10      0 ms  state=OPEN      source=cache (fallback)
+call 11      0 ms  state=OPEN      source=cache (fallback)
+call 12      0 ms  state=OPEN      source=cache (fallback)
+call 13      0 ms  state=OPEN      source=cache (fallback)
+call 14    501 ms  state=OPEN      source=cache (fallback)
+call 15      0 ms  state=OPEN      source=cache (fallback)
+call 16      0 ms  state=OPEN      source=cache (fallback)
+call 17      0 ms  state=OPEN      source=cache (fallback)
+call 18      0 ms  state=OPEN      source=cache (fallback)
+call 19      0 ms  state=OPEN      source=cache (fallback)
+call 20    500 ms  state=OPEN      source=cache (fallback)
+call 21      0 ms  state=OPEN      source=cache (fallback)
+   -- ms-inventory recovered --
+call 22      0 ms  state=OPEN      source=cache (fallback)
+call 23      0 ms  state=OPEN      source=cache (fallback)
+call 24      0 ms  state=OPEN      source=cache (fallback)
+call 25      0 ms  state=OPEN      source=cache (fallback)
+call 26      4 ms  state=CLOSED    source=live
+call 27      4 ms  state=CLOSED    source=live
+call 28      4 ms  state=CLOSED    source=live
+call 29      4 ms  state=CLOSED    source=live
+call 30      4 ms  state=CLOSED    source=live
+### Summary: callers waited 8.01 s during the outage (calls 6-21) WITHOUT breaker; 30 requests reached ms-inventory
+### Summary: callers waited 2.51 s during the outage (calls 6-21) WITH breaker;    15 requests reached ms-inventory
+SUMMARY {"withoutBreakerOutageSeconds": 8.005, "withBreakerOutageSeconds": 2.505, "requestsWithoutBreaker": 30, "requestsWithBreaker": 15}
+
+### chart from the JSON evidence
+saved evidence/aws/circuit-breaker-latency.png

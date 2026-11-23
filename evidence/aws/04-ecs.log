@@ -1,0 +1,107 @@
+=== 2026-11-23T12:21:13Z  04-ecs  account=651938348754 region=us-east-1 ===
+
+### ECS services (desired vs running)
+---------------------------------------
+|          DescribeServices           |
++---------------+----+----+-----------+
+|  ms-donors    |  3 |  3 |  FARGATE  |
+|  ms-inventory |  1 |  1 |  FARGATE  |
+|  ms-requests  |  1 |  1 |  FARGATE  |
++---------------+----+----+-----------+
+
+### running tasks of ms-donors (one per IP)
+arn:aws:ecs:us-east-1:651938348754:task/yawar-cluster/752cd2b242504782bc345e0cfaf75eed	RUNNING	UNKNOWN	512	1024	10.20.0.190
+arn:aws:ecs:us-east-1:651938348754:task/yawar-cluster/de2b54b426b7418bb5095fd564351b08	RUNNING	UNKNOWN	512	1024	10.20.1.158
+arn:aws:ecs:us-east-1:651938348754:task/yawar-cluster/e2fd63bdf8f34682843681fe5be94358	RUNNING	UNKNOWN	512	1024	10.20.1.209
+
+### task definition (cpu/memory/image)
+yawar-ms-donors	1	512	1024	651938348754.dkr.ecr.us-east-1.amazonaws.com/yawar/ms-donors:v1
+
+### inject a failure into ONE ms-donors task through the ALB
+{"mode":"fail","instance":"ip-10-20-0-190.ec2.internal"}
+
+### ALB marks it unhealthy and ECS replaces the task (polling every 15 s)
+--- 07:21:21
+10.20.1.209	healthy
+10.20.1.158	healthy
+10.20.0.190	healthy
+--- 07:21:37
+10.20.1.209	healthy
+10.20.1.158	healthy
+10.20.0.190	healthy
+--- 07:21:52
+10.20.1.209	healthy
+10.20.1.158	healthy
+10.20.0.190	unhealthy
+--- 07:22:08
+10.20.1.209	healthy
+10.20.1.158	healthy
+10.20.0.190	unhealthy
+--- 07:22:24
+10.20.1.209	healthy
+10.20.1.158	healthy
+10.20.0.190	unhealthy
+--- 07:22:40
+10.20.1.209	healthy
+10.20.1.158	healthy
+10.20.0.190	unhealthy
+--- 07:22:56
+10.20.1.209	healthy
+10.20.1.158	healthy
+10.20.0.190	unhealthy
+--- 07:23:11
+10.20.0.84	healthy
+10.20.0.190	unhealthy
+10.20.1.209	healthy
+10.20.1.158	healthy
+--- 07:23:27
+10.20.0.84	healthy
+10.20.0.190	draining
+10.20.1.209	healthy
+10.20.1.158	healthy
+--- 07:23:43
+10.20.0.84	healthy
+10.20.1.209	healthy
+10.20.1.158	healthy
+--- 07:23:59
+10.20.1.209	healthy
+10.20.1.158	healthy
+10.20.0.84	healthy
+--- 07:24:15
+10.20.1.209	healthy
+10.20.1.158	healthy
+10.20.0.84	healthy
+--- 07:24:31
+10.20.1.209	healthy
+10.20.1.158	healthy
+10.20.0.84	healthy
+--- 07:24:47
+10.20.1.209	healthy
+10.20.1.158	healthy
+10.20.0.84	healthy
+--- 07:25:02
+10.20.1.209	healthy
+10.20.1.158	healthy
+10.20.0.84	healthy
+--- 07:25:18
+10.20.1.209	healthy
+10.20.1.158	healthy
+10.20.0.84	healthy
+
+### ECS service events (look for 'unhealthy' and 'has started 1 tasks')
+2026-11-23T07:23:28.791000-05:00	(service ms-donors) has reached a steady state.
+2026-11-23T07:23:19.460000-05:00	(service ms-donors) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:us-east-1:651938348754:targetgroup/yawar-ms-donors/e70553e6a5d9d29a)
+2026-11-23T07:23:19.405000-05:00	(service ms-donors, taskSet ecs-svc/9794378101858115968) has begun draining connections on 1 tasks.
+2026-11-23T07:23:19.401000-05:00	(service ms-donors) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:us-east-1:651938348754:targetgroup/yawar-ms-donors/e70553e6a5d9d29a)
+2026-11-23T07:23:09.337000-05:00	(service ms-donors) has stopped 1 running tasks: (task 752cd2b242504782bc345e0cfaf75eed).
+2026-11-23T07:23:09.304000-05:00	(service ms-donors) (task 752cd2b242504782bc345e0cfaf75eed) (port 8080) is unhealthy in (target-group arn:aws:elasticloadbalancing:us-east-1:651938348754:targetgroup/yawar-ms-donors/e70553e6a5d9d29a) due to (reason Health checks failed with these codes: [503]).
+2026-11-23T07:23:00.764000-05:00	(service ms-donors) registered 1 targets in (target-group arn:aws:elasticloadbalancing:us-east-1:651938348754:targetgroup/yawar-ms-donors/e70553e6a5d9d29a)
+2026-11-23T07:22:23.768000-05:00	(service ms-donors) has started 1 tasks: (task 957789c390444852909d49077ae533e1). Amazon ECS replaced 1 tasks due to an unhealthy status.
+
+### last log lines of ms-donors in CloudWatch
+2026-11-23T12:15:42 2026-11-23T12:15:42.305Z  INFO 1 --- [ms-donors] [           main] e.e.uce.yawar.donors.DonorsApplication   : Started DonorsApplication in 8.001 seconds (process running for 9.675)
+2026-11-23T12:16:28 2026-11-23T12:16:28.875Z  INFO 1 --- [ms-donors] [           main] e.e.uce.yawar.donors.DonorsApplication   : Started DonorsApplication in 7.993 seconds (process running for 9.604)
+2026-11-23T12:16:41 2026-11-23T12:16:41.670Z  INFO 1 --- [ms-donors] [           main] e.e.uce.yawar.donors.DonorsApplication   : Started DonorsApplication in 8.695 seconds (process running for 10.498)
+2026-11-23T12:16:56 2026-11-23T12:16:56.767Z  INFO 1 --- [ms-donors] [nio-8080-exec-4] e.edu.uce.yawar.donors.DonorController   : GET /api/donors instance=ip-10-20-1-209.ec2.internal reqId=null
+2026-11-23T12:21:20 2026-11-23T12:21:20.416Z  WARN 1 --- [ms-donors] [nio-8080-exec-7] e.edu.uce.yawar.donors.DonorController   : chaos mode=fail on instance=ip-10-20-0-190.ec2.internal
+2026-11-23T12:22:59 2026-11-23T12:22:59.839Z  INFO 1 --- [ms-donors] [           main] e.e.uce.yawar.donors.DonorsApplication   : Started DonorsApplication in 7.819 seconds (process running for 9.52)

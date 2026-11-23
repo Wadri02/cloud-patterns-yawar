@@ -1,0 +1,6 @@
+flowchart LR
+  OP((Administrator)) -->|SSH 22 from own /32<br/>labsuser.pem| B[Bastion EC2<br/>public subnet]
+  OP -. no route .-> P
+  subgraph VPC["VPC 10.30.0.0/16"]
+    B -->|SG reference only| P[(ms-donors-db<br/>private subnet)]
+  end

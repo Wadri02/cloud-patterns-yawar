@@ -1,0 +1,43 @@
+=== 2026-11-23T12:09:43Z  01-bootstrap  account=651938348754 region=us-east-1 ===
+Removed aws_s3_bucket.artifacts
+Successfully removed 1 resource instance(s).
+[0m[1maws_ecr_repository.svc["ms-donors"]: Refreshing state... [id=yawar/ms-donors][0m
+[0m[1mdata.aws_caller_identity.me: Reading...[0m[0m
+[0m[1maws_ecr_repository.svc["ms-inventory"]: Refreshing state... [id=yawar/ms-inventory][0m
+[0m[1maws_ecr_repository.svc["ms-requests"]: Refreshing state... [id=yawar/ms-requests][0m
+[0m[1mdata.aws_caller_identity.me: Read complete after 0s [id=651938348754][0m
+
+[0m[1m[32mNo changes.[0m[1m Your infrastructure matches the configuration.[0m
+
+[0mTerraform has compared your real infrastructure against your configuration
+and found no differences, so no changes are needed.
+[0m[1m[32m
+Apply complete! Resources: 0 added, 0 changed, 0 destroyed.[0m
+[0m[1m[32m
+Outputs:
+
+[0martifact_bucket = "yawar-artifacts-651938348754"
+ecr_registry = "651938348754.dkr.ecr.us-east-1.amazonaws.com"
+ecr_repositories = {
+  "ms-donors" = "651938348754.dkr.ecr.us-east-1.amazonaws.com/yawar/ms-donors"
+  "ms-inventory" = "651938348754.dkr.ecr.us-east-1.amazonaws.com/yawar/ms-inventory"
+  "ms-requests" = "651938348754.dkr.ecr.us-east-1.amazonaws.com/yawar/ms-requests"
+}
+
+### S3 artefact bucket: yawar-artifacts-651938348754
+{
+    "BucketArn": "arn:aws:s3:::yawar-artifacts-651938348754",
+    "BucketRegion": "us-east-1",
+    "AccessPointAlias": false
+}
+bucket already exists
+2026-11-23 07:07:52 yawar-artifacts-651938348754
+
+### ECR repositories
+-------------------------------------------------------------------------------------------
+|                                  DescribeRepositories                                   |
++--------------------+--------------------------------------------------------------------+
+|  yawar/ms-donors   |  651938348754.dkr.ecr.us-east-1.amazonaws.com/yawar/ms-donors      |
+|  yawar/ms-inventory|  651938348754.dkr.ecr.us-east-1.amazonaws.com/yawar/ms-inventory   |
+|  yawar/ms-requests |  651938348754.dkr.ecr.us-east-1.amazonaws.com/yawar/ms-requests    |
++--------------------+--------------------------------------------------------------------+

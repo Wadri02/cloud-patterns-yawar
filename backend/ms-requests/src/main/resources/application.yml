@@ -1,0 +1,48 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: ms-requests
+  mvc:
+    async:
+      request-timeout: 60s
+yawar:
+  # AWS: http://<alb-dns>/api/inventory  (set by the ECS task definition) | local: docker compose
+  inventory-url: ${INVENTORY_URL:http://localhost:8081/api/inventory}
+
+# Production-style protection of GET /api/requests/stock (StockService)
+resilience4j:
+  circuitbreaker:
+    instances:
+      inventory:
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 50
+        slow-call-duration-threshold: 800ms
+        slow-call-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+        permitted-number-of-calls-in-half-open-state: 2
+        register-health-indicator: true
+  retry:
+    instances:
+      inventory:
+        max-attempts: 3
+        wait-duration: 200ms
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
+        enable-randomized-wait: true
+        randomized-wait-factor: 0.5
+        retry-exceptions:
+          - ec.edu.uce.yawar.requests.resilience.RetryableException
+        ignore-exceptions:
+          - java.lang.IllegalArgumentException
+  timelimiter:
+    instances:
+      inventory:
+        timeout-duration: 1s
+        cancel-running-future: true
+
+management:
+  endpoints.web.exposure.include: health,info,circuitbreakers,retries
+  health.circuitbreakers.enabled: true

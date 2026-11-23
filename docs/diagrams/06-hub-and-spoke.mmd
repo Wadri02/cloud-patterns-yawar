@@ -1,0 +1,5 @@
+flowchart LR
+  D[VPC donors<br/>10.1.0.0/16] <-->|rt-internal| TGW{{AWS Transit Gateway<br/>hub}}
+  TGW <-->|rt-internal| I[VPC inventory<br/>10.2.0.0/16]
+  H[VPC hospital<br/>10.3.0.0/16] <-->|rt-partner: hub + inventory only| TGW
+  TGW <--> S[Hub VPC shared services<br/>10.0.0.0/16]

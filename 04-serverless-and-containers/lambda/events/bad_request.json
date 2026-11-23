@@ -1,0 +1,1 @@
+{"version": "2.0", "routeKey": "POST /stock-alerts", "body": "{\"center\": \"X\", \"stock\": {\"Z+\": 1}}"}

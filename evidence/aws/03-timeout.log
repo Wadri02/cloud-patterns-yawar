@@ -1,0 +1,44 @@
+=== 2026-11-23T12:20:34Z  03-timeout  account=651938348754 region=us-east-1 ===
+target: http://yawar-alb-84810282.us-east-1.elb.amazonaws.com
+
+### GET http://yawar-alb-84810282.us-east-1.elb.amazonaws.com/api/requests/demo/timeout?impl=custom
+=== 2026-11-23T12:20:35.614281624Z timeout demo (impl=custom) ===
+### A) ms-inventory hangs (2 s). 12 concurrent requests, worker pool of 4 threads
+   no timeout     : all 12 answered after  6.02 s   results=[live]
+   timeout = 0.5 s: all 12 answered after  1.50 s   results=[fallback]
+### B) connect timeout vs read timeout
+   unreachable host   -> timeout: HTTP connect timed out after 301 ms
+   connected but slow -> timeout: request timed out after 800 ms
+### C) deadline propagation: the gateway gives the whole request a 1000 ms budget
+  without propagation:
+   step 1 ms-inventory -> 200 (remaining budget 593 ms)
+   step 2 ms-analytics -> caller timed out after 590 ms (the server kept working 800 ms for nobody)
+   total 1001 ms
+  with X-Deadline-Ms propagation:
+   step 1 ms-inventory -> 200 (remaining budget 594 ms)
+   step 2 ms-analytics -> 504 {"neededMs":800,"error":"deadline too short","budgetMs":593} in 4 ms
+   total 414 ms
+### D) custom time limiter around a slow non-HTTP call (simulated SQL query 1.5 s, limit 300 ms)
+   TimeoutExceededException: call exceeded 300 ms; caller released after 305 ms
+SUMMARY {"burstNoTimeoutSeconds": 6.015989056, "burstWithTimeoutSeconds": 1.503009927, "deadlineWithoutPropagationMs": 1001, "deadlineWithPropagationMs": 414}
+
+### GET http://yawar-alb-84810282.us-east-1.elb.amazonaws.com/api/requests/demo/timeout?impl=resilience4j
+=== 2026-11-23T12:20:53.786817684Z timeout demo (impl=resilience4j) ===
+### A) ms-inventory hangs (2 s). 12 concurrent requests, worker pool of 4 threads
+   no timeout     : all 12 answered after  6.02 s   results=[live]
+   timeout = 0.5 s: all 12 answered after  1.51 s   results=[fallback]
+### B) connect timeout vs read timeout
+   unreachable host   -> timeout: HTTP connect timed out after 301 ms
+   connected but slow -> timeout: request timed out after 800 ms
+### C) deadline propagation: the gateway gives the whole request a 1000 ms budget
+  without propagation:
+   step 1 ms-inventory -> 200 (remaining budget 596 ms)
+   step 2 ms-analytics -> caller timed out after 603 ms (the server kept working 800 ms for nobody)
+   total 1009 ms
+  with X-Deadline-Ms propagation:
+   step 1 ms-inventory -> 200 (remaining budget 594 ms)
+   step 2 ms-analytics -> 504 {"neededMs":800,"error":"deadline too short","budgetMs":594} in 3 ms
+   total 409 ms
+### D) resilience4j time limiter around a slow non-HTTP call (simulated SQL query 1.5 s, limit 300 ms)
+   TimeoutExceededException: resilience4j TimeLimiter: TimeLimiter 'inventory-demo' recorded a timeout exception.; caller released after 302 ms
+SUMMARY {"burstNoTimeoutSeconds": 6.016972703, "burstWithTimeoutSeconds": 1.509996453, "deadlineWithoutPropagationMs": 1009, "deadlineWithPropagationMs": 409}

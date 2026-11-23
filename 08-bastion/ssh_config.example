@@ -1,0 +1,17 @@
+# ~/.ssh/config - day-to-day use of the bastion created by 08-bastion/terraform
+Host yawar-bastion
+    HostName <bastion_public_ip>
+    User ec2-user
+    IdentityFile ~/.ssh/labsuser.pem
+    IdentitiesOnly yes
+    ForwardAgent no
+
+Host yawar-private
+    HostName <private_ip>
+    User ec2-user
+    IdentityFile ~/.ssh/labsuser.pem
+    IdentitiesOnly yes
+    ProxyJump yawar-bastion          # = ssh -J yawar-bastion
+
+# Port-forward the private app to your laptop:
+#   ssh -N -L 9090:<private_ip>:8080 yawar-bastion   then   curl localhost:9090/api/donors

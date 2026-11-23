@@ -1,0 +1,8 @@
+stateDiagram-v2
+  direction LR
+  [*] --> CLOSED
+  CLOSED --> OPEN: 3 consecutive failures
+  OPEN --> HALF_OPEN: after 1.5 s
+  HALF_OPEN --> CLOSED: trial call succeeds
+  HALF_OPEN --> OPEN: trial call fails
+  note right of OPEN: ms-requests answers with the last known stock

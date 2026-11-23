@@ -1,0 +1,9 @@
+{
+  "version": "2.0",
+  "routeKey": "POST /stock-alerts",
+  "rawPath": "/stock-alerts",
+  "headers": {"content-type": "application/json"},
+  "requestContext": {"http": {"method": "POST", "path": "/stock-alerts"}, "stage": "$default"},
+  "body": "{\"center\": \"Hospital Eugenio Espejo\", \"stock\": {\"O+\": 12, \"O-\": 2, \"A+\": 7, \"B-\": 0}}",
+  "isBase64Encoded": false
+}

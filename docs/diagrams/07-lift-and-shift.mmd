@@ -1,0 +1,12 @@
+flowchart LR
+  subgraph OnPrem["On-premises"]
+    S1[legacy-registry.jar<br/>Java 21, CSV data, systemd]
+  end
+  subgraph AWS["AWS"]
+    S3[(S3 bundle<br/>+ SHA-256)]
+    E1[EC2 Amazon Linux 2023<br/>Corretto 21, same JAR]
+  end
+  S1 -->|1 assess, 2 replicate| S3
+  S3 -->|3 launch user-data| E1
+  E1 -->|4 test: same SHA, same data| T[Validation]
+  T -->|5 delta sync, DNS switch| E1

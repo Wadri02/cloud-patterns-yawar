@@ -1,0 +1,2 @@
+{"version": "0", "id": "c1d2e3", "detail-type": "Scheduled Event", "source": "aws.events",
+ "time": "2026-11-22T22:00:00Z", "region": "us-east-1", "resources": ["arn:aws:events:us-east-1:123456789012:rule/yawar-hourly"], "detail": {}}

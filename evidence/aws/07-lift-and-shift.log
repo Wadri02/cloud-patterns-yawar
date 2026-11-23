@@ -1,0 +1,62 @@
+=== 2026-11-23T12:57:08Z  07-lift-and-shift  account=651938348754 region=us-east-1 ===
+
+### 0. Current state: the legacy registry runs ON-PREMISES (java -jar on this machine)
+POST /donors -> 201
+POST /donors -> 201
+POST /donors -> 201
+{"app":"yawar-legacy-registry","version":"1.4.2","host":"DESKTOP-IFNJ2K6","site":"onprem-quito-dc","started":"2026-11-23T12:57:15.503239796Z","jarSha256":"76f9bd9bce8e8d82c729024b58e0d79704c2be4dba04f0aa8d14031fadcfb1ba","java":"21.0.13.1"}
+
+### 1. ASSESS: inventory of the source server
+application : yawar-legacy-registry (JAR, Java 21, port 8080, data in a local CSV file)
+jar sha256  : 76f9bd9bce8e8d82c729024b58e0d79704c2be4dba04f0aa8d14031fadcfb1ba
+records     : 3
+strategy    : REHOST (no code change) -> Amazon EC2 + Amazon Corretto 21 + same systemd unit
+
+### 2. REPLICATE: bundle (binary + config + data + service unit) with checksums, uploaded to S3
+a8f63d09104b06323172aec3c5ef62e00c0cf8ceefd50292e511a0f2c3a1fa3f  app.aws.conf
+bcc74ff3626cb96b38b63fc8f519f82961d5c75f647736c623356470bed3ba16  donors.csv
+76f9bd9bce8e8d82c729024b58e0d79704c2be4dba04f0aa8d14031fadcfb1ba  legacy-registry.jar
+c4729e15eb638166213f5e6e6bc4e8ca4e6840e6ea677c05cb6158338ff2a65f  yawar-legacy.service
+2026-11-23 07:57:17        329 SHA256SUMS
+2026-11-23 07:57:17        149 app.aws.conf
+2026-11-23 07:57:17         64 donors.csv
+2026-11-23 07:57:17       6955 legacy-registry.jar
+2026-11-23 07:57:17        289 yawar-legacy.service
+
+### 3. LAUNCH the target EC2 instance
+
+[0mpublic_ip = "3.238.193.180"
+url = "http://3.238.193.180:8080"
+waiting for the service on http://3.238.193.180:8080 (Corretto install + boot)...
+
+### 4. TEST the migrated instance before cutover
+jar sha256 on-prem : 76f9bd9bce8e8d82c729024b58e0d79704c2be4dba04f0aa8d14031fadcfb1ba
+jar sha256 on EC2  : 76f9bd9bce8e8d82c729024b58e0d79704c2be4dba04f0aa8d14031fadcfb1ba
+RESULT: identical binary -> application rehosted WITHOUT code changes
+RESULT: GET /donors identical on source and target
+{"app":"yawar-legacy-registry","version":"1.4.2","host":"ip-172-31-15-80.ec2.internal","site":"aws-us-east-1","started":"2026-11-23T12:58:22.436497165Z","jarSha256":"76f9bd9bce8e8d82c729024b58e0d79704c2be4dba04f0aa8d14031fadcfb1ba","java":"21.0.13.1"}
+
+### 5. CUTOVER: freeze writes, final delta sync, switch users to EC2
+late write on-prem during the test window -> 201
+on-prem service stopped (writes frozen)
+Warning: Permanently added '3.238.193.180' (ED25519) to the list of known hosts.
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+active
+records on EC2 after delta sync: 4  (expected 4)
+new write on AWS -> 201
+DNS switch: registry.yawar.local -> 3.238.193.180  (in production: change the A record / Route 53, low TTL)
+
+### systemd status on EC2
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+● yawar-legacy.service - Yawar legacy donor registry
+     Loaded: loaded (/etc/systemd/system/yawar-legacy.service; enabled; preset: disabled)
+     Active: active (running) since Mon 2026-11-23 12:58:28 UTC; 4s ago
+   Main PID: 19370 (java)
+      Tasks: 26 (limit: 2255)
+Nov 23 12:58:28 ip-172-31-15-80.ec2.internal systemd[1]: Stopped yawar-legacy.service - Yawar legacy donor registry.
+Nov 23 12:58:28 ip-172-31-15-80.ec2.internal systemd[1]: Started yawar-legacy.service - Yawar legacy donor registry.
+Nov 23 12:58:28 ip-172-31-15-80.ec2.internal java[19370]: legacy registry v1.4.2 on ip-172-31-15-80.ec2.internal site=aws-us-east-1 data=/var/lib/yawar/donors.csv jar=76f9bd9bce8e8d82c729024b58e0d79704c2be4dba04f0aa8d14031fadcfb1ba

@@ -1,0 +1,15 @@
+#!/bin/bash
+# Serves "I am <spoke>" on :8080 and probes the other VPCs through the Transit Gateway.
+mkdir -p /srv && echo '{"vpc":"${name}"}' > /srv/index.html
+cd /srv && nohup python3 -m http.server 8080 >/dev/null 2>&1 &
+say() { echo "$*" | tee /dev/console /dev/ttyS0 >/dev/null; }
+sleep 90   # give the other probes and the TGW attachments time to come up
+for t in ${targets}; do
+  dst=$${t%%=*}; ip=$${t##*=}; res=FAIL
+  for i in 1 2 3 4 5 6; do
+    if out=$(curl -s -m 3 "http://$ip:8080/"); then res="OK $out"; break; fi
+    sleep 10
+  done
+  say "YAWAR-PROBE from=${name} to=$dst ($ip) result=$res"
+done
+say "YAWAR-PROBE-DONE from=${name}"

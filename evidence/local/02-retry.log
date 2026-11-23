@@ -1,0 +1,55 @@
+target: http://localhost:8082
+
+### GET http://localhost:8082/api/requests/demo/retry?impl=custom
+=== 2026-11-23T07:51:46.835232934Z retry demo (impl=custom) ===
+### A) transient failure: next 2 requests return 503
+   attempt 1 failed (HTTP 503); retrying in 17 ms
+   attempt 2 failed (HTTP 503); retrying in 117 ms
+   result: {"O+":42,"O-":3,"A+":18,"source":"live"}  (143 ms, requests sent: 3)
+### B) client error 400 is NOT retried
+   failed fast: HTTP 400 {"error":"invalid blood type"}  (requests sent: 1)
+### C) permanent outage
+   attempt 1 failed (HTTP 503); retrying in 64 ms
+   attempt 2 failed (HTTP 503); retrying in 92 ms
+   attempt 3 failed (HTTP 503); retrying in 338 ms
+   RetriesExhaustedException: gave up after 4 attempts: HTTP 503  (requests sent: 4)
+### D1) POST donation, response lost once, NO Idempotency-Key
+   attempt 1 failed (HTTP 503); retrying in 26 ms
+   result: {"donationId":"DON-0002","donor":"D-001","bloodType":"O+","center":"HCAM"}
+   donations stored: 2   <-- DUPLICATE created by the retry
+### D2) same failure WITH Idempotency-Key
+   Idempotency-Key: 47445e6f-716d-419e-ac6b-6baa8935434d
+   attempt 1 failed (HTTP 503); retrying in 29 ms
+   result: {"donationId":"DON-0001","donor":"D-001","bloodType":"O+","center":"HCAM","replayed":true}
+   donations stored: 1   <-- safe retry, no duplicate
+### E) simulation: 200 clients fail at t=0 and retry 4 times (base 400 ms, cap 3.2 s), 100 ms windows
+   no jitter  : peak 200 requests in one window
+   full jitter: peak 83 requests in one window
+SUMMARY {"permanentOutageRequests": 4, "donationsWithoutKey": 2, "donationsWithKey": 1, "peakNoJitter": 200, "peakFullJitter": 83}
+
+### GET http://localhost:8082/api/requests/demo/retry?impl=resilience4j
+=== 2026-11-23T07:51:47.611844814Z retry demo (impl=resilience4j) ===
+### A) transient failure: next 2 requests return 503
+   attempt 1 failed (HTTP 503); retrying in 105 ms
+   attempt 2 failed (HTTP 503); retrying in 124 ms
+   result: {"O+":42,"O-":3,"A+":18,"source":"live"}  (240 ms, requests sent: 3)
+### B) client error 400 is NOT retried
+   failed fast: HTTP 400 {"error":"invalid blood type"}  (requests sent: 1)
+### C) permanent outage
+   attempt 1 failed (HTTP 503); retrying in 99 ms
+   attempt 2 failed (HTTP 503); retrying in 134 ms
+   attempt 3 failed (HTTP 503); retrying in 407 ms
+   RetryableException: HTTP 503  (requests sent: 4)
+### D1) POST donation, response lost once, NO Idempotency-Key
+   attempt 1 failed (HTTP 503); retrying in 51 ms
+   result: {"donationId":"DON-0002","donor":"D-001","bloodType":"O+","center":"HCAM"}
+   donations stored: 2   <-- DUPLICATE created by the retry
+### D2) same failure WITH Idempotency-Key
+   Idempotency-Key: 46459b00-e6d9-481a-9aae-ae811ab273c7
+   attempt 1 failed (HTTP 503); retrying in 59 ms
+   result: {"donationId":"DON-0001","donor":"D-001","bloodType":"O+","center":"HCAM","replayed":true}
+   donations stored: 1   <-- safe retry, no duplicate
+### E) simulation: 200 clients fail at t=0 and retry 4 times (base 400 ms, cap 3.2 s), 100 ms windows
+   no jitter  : peak 200 requests in one window
+   full jitter: peak 83 requests in one window
+SUMMARY {"permanentOutageRequests": 4, "donationsWithoutKey": 2, "donationsWithKey": 1, "peakNoJitter": 200, "peakFullJitter": 83}

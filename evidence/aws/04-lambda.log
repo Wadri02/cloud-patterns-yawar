@@ -1,0 +1,33 @@
+=== 2026-11-23T12:26:27Z  04-lambda  account=651938348754 region=us-east-1 ===
+
+### unit tests (pytest)
+....                                                                     [100%]
+4 passed in 0.01s
+
+### terraform apply
+Apply complete! Resources: 10 added, 0 changed, 0 destroyed.[0m
+[0m[1m[32m
+Outputs:
+
+[0mapi_url = "https://4svrwlvsx3.execute-api.us-east-1.amazonaws.com"
+
+### 1st call through API Gateway (cold start expected)
+{"message":"Not Found"}
+
+### 2nd call (warm)
+{"center": "HCAM Quito", "threshold": 5, "critical": ["AB-"], "notify": ["Need AB- donors at HCAM Quito"], "coldStart": true, "requestId": "0be25548-591a-4958-b6d5-bbaadebac63d", "remainingMs": 2999}
+
+### invalid input -> 400
+HTTP 400
+
+### direct invoke with the EventBridge scheduled event
+{"statusCode": 200, "headers": {"Content-Type": "application/json"}, "body": "{\"center\": \"HCAM Quito\", \"threshold\": 5, \"critical\": [\"AB-\", \"O-\"], \"notify\": [\"Need AB- donors at HCAM Quito\", \"Need O- donors at HCAM Quito\"], \"coldStart\": false, \"requestId\": \"dc0b030f-0ea9-4071-a870-1fca31819c58\", \"remainingMs\": 2999}"}
+
+### CloudWatch Logs (INIT / REPORT lines show cold start and billed duration)
+2026-11-23T12:26:52 INIT_START Runtime Version: python:3.14.mainline.v118	Runtime Version ARN: arn:aws:lambda:us-east-1::runtime:eaebdc1115476ede1dce9876df554dcaaae527c20c43bd19bfeaa754e9eafb4d
+2026-11-23T12:26:52 {"level": "INFO", "msg": "evaluated", "coldStart": true, "requestId": "0be25548-591a-4958-b6d5-bbaadebac63d", "remainingMs": 2999, "critical": ["AB-"]}
+2026-11-23T12:26:52 REPORT RequestId: 0be25548-591a-4958-b6d5-bbaadebac63d	Duration: 2.03 ms	Billed Duration: 100 ms	Memory Size: 128 MB	Max Memory Used: 34 MB	Init Duration: 97.19 ms
+2026-11-23T12:26:52 {"level": "WARN", "msg": "bad request", "error": "Expecting value: line 1 column 1 (char 0)", "coldStart": false, "requestId": "c4b7c76a-be50-4664-b85e-00acba74bd85", "remainingMs": 3000}
+2026-11-23T12:26:52 REPORT RequestId: c4b7c76a-be50-4664-b85e-00acba74bd85	Duration: 1.80 ms	Billed Duration: 2 ms	Memory Size: 128 MB	Max Memory Used: 34 MB
+2026-11-23T12:26:53 {"level": "INFO", "msg": "evaluated", "coldStart": false, "requestId": "dc0b030f-0ea9-4071-a870-1fca31819c58", "remainingMs": 2999, "critical": ["AB-", "O-"]}
+2026-11-23T12:26:53 REPORT RequestId: dc0b030f-0ea9-4071-a870-1fca31819c58	Duration: 1.57 ms	Billed Duration: 2 ms	Memory Size: 128 MB	Max Memory Used: 34 MB

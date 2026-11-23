@@ -1,0 +1,32 @@
+=== 2026-11-23T12:34:17Z  05-edge  account=651938348754 region=us-east-1 ===
+[0malb_url = "http://yawar-alb-84810282.us-east-1.elb.amazonaws.com"
+api_gateway_url = "https://0pnqzgj229.execute-api.us-east-1.amazonaws.com/prod"
+api_keys = <sensitive>
+cloudfront_url = ""
+CloudFront disabled: testing API Gateway directly
+entry point: https://0pnqzgj229.execute-api.us-east-1.amazonaws.com/prod
+
+### waiting for the entry point to answer (CloudFront can take 5-15 min)
+  07:34:28 HTTP 403
+
+### 1. REVERSE PROXY (CloudFront): HTTPS at the edge, origin hidden
+HTTP/2 200 
+
+### 2. API GATEWAY: no API key -> 403
+{"message":"Forbidden"}  HTTP 403
+
+### 3. LOAD BALANCER: 6 calls with a valid key are spread over the ms-donors tasks
+x-instance: ip-10-20-1-209.ec2.internal
+x-instance: ip-10-20-0-84.ec2.internal
+x-instance: ip-10-20-0-84.ec2.internal
+x-instance: ip-10-20-1-158.ec2.internal
+x-instance: ip-10-20-1-209.ec2.internal
+x-instance: ip-10-20-1-209.ec2.internal
+
+### 4. EDGE CACHE: /api/inventory is cached 5 s by CloudFront
+
+### 5. API GATEWAY THROTTLING (usage plan: 1 req/s, burst 5): 15 rapid calls from the web-app key
+200 200 200 200 200 200 200 429 429 429 429 429 429 200 200 
+
+### 6. The same request straight to the ALB (no key, no throttling, no TLS): why the layers matter
+ALB direct -> HTTP 200
